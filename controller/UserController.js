@@ -20,6 +20,16 @@ class AuthController {
           res.status(400).send({ error: error.message });
         }
     }
+
+    async getUser(req, res){
+        try {
+            const retrievedEmail = req.user.email; // Extracted from the token in the middleware
+            const result = await UserService.getUser(retrievedEmail);
+            res.json(result);
+          } catch (error) {
+            res.status(400).json({ error: error.message });
+          }
+    }
     async update(req, res) {
         try {
             const updateDto = req.body;

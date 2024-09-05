@@ -48,6 +48,21 @@ class UserService {
       };
 
     }
+
+    async getUser(retrievedEmail) {
+      const user = await UserRepository.findByEmail(retrievedEmail);
+      if (!user) {
+        throw new Error('User not found');
+      }
+  
+      return {
+        email: user.email,
+        username: user.username,
+        firstName: user.firstName || '', 
+        lastName: user.lastName || ''
+      };
+    }
+
     async updateUser(email, updateDto) {
       console.log('Received updateDto:', updateDto);
       const user = await UserRepository.findByEmail(email);
