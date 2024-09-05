@@ -48,8 +48,52 @@ class UserService {
       };
 
     }
-   
- 
+    async updateUser(email, updateDto) {
+      console.log('Received updateDto:', updateDto);
+      const user = await UserRepository.findByEmail(email);
+
+      if (!user) {
+          throw new Error('User not found');
+      }
+
+      console.log('User found:', user);
+     
+      const updateFields = {};
+
+      if (updateDto.password) {
+          updateFields.password = await bcryptUtil.hashPassword(updateDto.password);
+      }
+  
+      if (updateDto.firstName) updateFields.firstName = updateDto.firstName;
+      if (updateDto.lastName) updateFields.lastName = updateDto.lastName;
+      if (updateDto.avatar) updateFields.avatar = updateDto.avatar;
+      if (updateDto.bio) updateFields.bio = updateDto.bio;
+  
+      const updatedUser = await UserRepository.findByIdAndUpdate(user._id, updateFields);
+      console.log('Updated user:', updatedUser);
+  
+      if (!updatedUser) {
+        throw new Error('Error updating user');
+      }   
+
+      // Generate a new token (optional, if you want to return a new token after update)
+      const token = jwtUtil.generateToken({
+          id: updatedUser._id,
+          email: updatedUser.email,
+      });
+  
+      return {
+          token,
+          user: {
+              email: updatedUser.email,
+              username: updatedUser.username,
+              firstName: updatedUser.firstName,
+              lastName: updatedUser.lastName,
+              avatar: updatedUser.avatar,
+              bio: updatedUser.bio,
+          },
+      };
+    }
   
 
   async logoutUser(userId) {

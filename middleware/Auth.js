@@ -19,7 +19,6 @@ const authMiddleware = {
           console.log("decodedRes:", decoded);
           req.user = decoded; 
           console.log(req.user);
-          console.log(req.user.role);
           next(); 
       } catch (error) {
           return res.status(401).send({ error: 'Unauthorized' });

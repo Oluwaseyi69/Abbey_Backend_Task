@@ -18,6 +18,9 @@ class UserRepository {
     async findByUsername(username){
         return await UserModel.findByUsername ({username})
     }
+    async findByIdAndUpdate(id, updateFields){
+        return await UserModel.findByIdAndUpdate(id, updateFields, {new: true});
+    }
 }
 
 module.exports = new UserRepository();
