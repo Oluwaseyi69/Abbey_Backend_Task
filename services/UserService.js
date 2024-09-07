@@ -114,7 +114,6 @@ class UserService {
   }
 
   async searchUserByEmail(email) {
-    // Convert the email to lowercase for consistent querying
     const user = await UserRepository.findByEmail(email.toLowerCase());
 
     if (!user) {
