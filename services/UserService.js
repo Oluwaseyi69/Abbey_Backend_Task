@@ -113,6 +113,25 @@ class UserService {
     };
   }
 
+  async searchUserByEmail(email) {
+    // Convert the email to lowercase for consistent querying
+    const user = await UserRepository.findByEmail(email.toLowerCase());
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return {
+      id: user._id,
+      email: user.email,
+      username: user.username,
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      avatar: user.avatar || "",
+      bio: user.bio || "",
+    };
+  }
+
   async addFriend(token, connectedUserEmail) {
     const userEmail = token;
     const relationshipDto = new RelationshipDto(
@@ -123,9 +142,6 @@ class UserService {
     await RelationshipService.addFriend(userEmail, relationshipDto);
     return { message: "Friend successfully added" };
   }
-
- 
-
 
   async deleteUser(email) {
     const user = await UserRepository.findByEmail(email);
@@ -138,8 +154,6 @@ class UserService {
 
     return { message: "User deleted successfully" };
   }
-  
-
 }
 
    

@@ -23,11 +23,27 @@ class AuthController {
 
   async getUser(req, res) {
     try {
-      const retrievedEmail = req.user.email; 
+      const retrievedEmail = req.user.email;
       const result = await UserService.getUser(retrievedEmail);
       res.json(result);
     } catch (error) {
       res.status(400).json({ error: error.message });
+    }
+  }
+  async searchUser(req, res) {
+    try {
+      const { email } = req.body;
+
+      if (!email) {
+        return res
+          .status(400)
+          .json({ error: "Email query parameter is required" });
+      }
+
+      const user = await UserService.searchUserByEmail(email);
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(404).json({ error: error.message });
     }
   }
   async update(req, res) {
@@ -45,7 +61,6 @@ class AuthController {
       res.status(400).send({ errorr: error.message });
     }
   }
-  
 
   async deleteUser(req, res) {
     try {
