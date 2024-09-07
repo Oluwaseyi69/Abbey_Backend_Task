@@ -1,7 +1,5 @@
-// const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const jwtUtil = require('../utils/JwtUtil')
-const UserRepository = require('../repositories/UserRepository');
 
 dotenv.config();
 
